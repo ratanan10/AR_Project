@@ -34,9 +34,17 @@ AFRAME.registerComponent("play-clips", {
     this.mixer.timeScale = this.data.timeScale;
 
     clips.forEach((clip, index) => {
-      if (index === this.data.exclude) return;
-      this.mixer.clipAction(clip).play();
+      if (index === this.data.exclude || clip.name === "drone1Action") return;
+      const action = this.mixer.clipAction(clip);
+      action.setLoop(AFRAME.THREE.LoopRepeat);
+      action.play();
     });
+  },
+
+  update(oldData) {
+    if (this.mixer && oldData && this.data.timeScale !== oldData.timeScale) {
+      this.mixer.timeScale = this.data.timeScale;
+    }
   },
 
   tick(time, delta) {

@@ -1,13 +1,9 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 import "aframe";
 import "mind-ar/dist/mindar-image-aframe.prod.js";
 import "./ar/playClips.js";
-import { useEffect } from 'react';
-import  models  from './config/models.js';
+import models from './config/models.js';
 
 
 function App() {
@@ -54,11 +50,16 @@ function App() {
     <main className="ar-app">
       <div className="ar-status">{status}</div>
        <a-scene
-        mindar-image="imageTargetSrc: /targets.mind; autoStart: true;
-      
-    uiLoading: no;
-    uiScanning:yes;
-    uiError: no;"
+        mindar-image="imageTargetSrc: /targets_combined.mind;
+          maxTrack: 2;
+          autoStart: true;
+          uiLoading: no;
+          uiScanning: yes;
+          uiError: no;
+          filterMinCF: 0.0001;
+          filterBeta: 0.001;
+          warmupTolerance: 5;
+          missTolerance: 5;"
         color-space="sRGB"
         renderer="colorManagement: true"
         vr-mode-ui="enabled: false"
@@ -89,6 +90,7 @@ function App() {
               position={model.position}
               rotation={model.rotation}
               scale={model.scale}
+              play-clips={`exclude: ${model.excludeClip ?? 0}; timeScale: ${model.timeScale ?? 1};`}
             />
           </a-entity>
         ))}

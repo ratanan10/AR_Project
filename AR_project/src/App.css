@@ -1,4 +1,3 @@
-
 html,
 body,
 #root {
@@ -45,8 +44,66 @@ body,
   max-width: 85vw;
 }
 
-/* Show MindAR's scanning interface */
+/* Engine Open/Close Controls */
+.engine-controls {
+  position: fixed;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  z-index: 1000;
+  pointer-events: auto;
+}
 
+.btn-engine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  outline: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-open {
+  background: rgba(254, 255, 255, 0.88); 
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.btn-open:active {
+  background: rgba(0, 0, 0, 0.95);
+  transform: scale(0.95);
+}
+
+.btn-close {
+  background: rgba(255, 255, 255, 0.88); /* crimson red */
+  color: #121111;
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.btn-close:active {
+  background: rgba(0, 0, 0, 0.95);
+  transform: scale(0.95);
+}
+
+.btn-icon {
+  font-size: 17px;
+}
+
+/* Show MindAR's scanning interface */
 
 /* Center the MindAR scanning overlay */
 .mindar-ui-overlay {

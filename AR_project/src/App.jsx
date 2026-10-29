@@ -118,6 +118,7 @@ function App() {
               position={model.position}
               rotation={model.rotation}
               scale={model.scale}
+              gesture-rotation
               play-clips={`exclude: ${model.excludeClip ?? 0}; timeScale: ${model.timeScale ?? 1}; loop: ${model.loop ?? true}; autoplay: ${model.autoplay ?? true};`}
             />
           </a-entity>

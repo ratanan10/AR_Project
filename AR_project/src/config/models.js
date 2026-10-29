@@ -11,6 +11,7 @@ const models = [
     rotation: "0 0 0",
     loop: true,
     autoplay: true,
+    enableGestureRotation: true,
   },
   {
     id: "heart",
@@ -24,6 +25,7 @@ const models = [
     rotation: "0 0 0",
     loop: true,
     autoplay: true,
+    enableGestureRotation: true,
   },
   {
     id: "engine",
@@ -37,6 +39,7 @@ const models = [
     rotation: "0 90 0",
     loop: false,
     autoplay: false,
+    enableGestureRotation: true,
   }
 ];
 

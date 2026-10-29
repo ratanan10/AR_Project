@@ -115,3 +115,60 @@ AFRAME.registerComponent("play-clips", {
     }
   },
 });
+
+AFRAME.registerComponent("gesture-rotation", {
+  schema: {
+    factor: { type: "number", default: 0.5 },
+  },
+
+  init() {
+    this.startX = 0;
+    this.isDragging = false;
+
+    this.onStart = (e) => {
+      // Don't drag if clicking UI buttons or overlay elements
+      if (e.target && (e.target.closest(".engine-controls") || e.target.closest("button"))) {
+        return;
+      }
+      this.isDragging = true;
+      this.startX = e.touches ? e.touches[0].clientX : e.clientX;
+    };
+
+    this.onMove = (e) => {
+      if (!this.isDragging) return;
+      // Only rotate when the parent target entity is visible
+      if (this.el.parentEl && !this.el.parentEl.object3D.visible) return;
+
+      const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      const deltaX = currentX - this.startX;
+      this.startX = currentX;
+
+      const currentRotation = this.el.getAttribute("rotation") || { x: 0, y: 0, z: 0 };
+      this.el.setAttribute("rotation", {
+        x: currentRotation.x,
+        y: currentRotation.y + deltaX * (this.data.factor || 0.5),
+        z: currentRotation.z,
+      });
+    };
+
+    this.onEnd = () => {
+      this.isDragging = false;
+    };
+
+    window.addEventListener("mousedown", this.onStart);
+    window.addEventListener("mousemove", this.onMove);
+    window.addEventListener("mouseup", this.onEnd);
+    window.addEventListener("touchstart", this.onStart, { passive: true });
+    window.addEventListener("touchmove", this.onMove, { passive: true });
+    window.addEventListener("touchend", this.onEnd, { passive: true });
+  },
+
+  remove() {
+    window.removeEventListener("mousedown", this.onStart);
+    window.removeEventListener("mousemove", this.onMove);
+    window.removeEventListener("mouseup", this.onEnd);
+    window.removeEventListener("touchstart", this.onStart);
+    window.removeEventListener("touchmove", this.onMove);
+    window.removeEventListener("touchend", this.onEnd);
+  },
+});

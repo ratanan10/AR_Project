@@ -5,30 +5,41 @@ import "mind-ar/dist/mindar-image-aframe.prod.js";
 import "./ar/playClips.js";
 import models from './config/models.js';
 
+const doorWindowModels = models.filter(
+  (model) => model.id === "door" || model.id === "window",
+);
+const doorWindowTargetIndex = doorWindowModels.find(
+  (model) => model.id === "door",
+).targetIndex;
+
 function App() {
   const [status, setStatus] = useState("Allow Camera access and scan a image target to start AR experience");
   const [isEngineActive, setIsEngineActive] = useState(false);
+  const [isDoorTargetActive, setIsDoorTargetActive] = useState(false);
+  const [doorViewMode, setDoorViewMode] = useState("door"); // "door" | "window"
 
   useEffect(() => {
     const listeners = [];
 
     models.forEach((model) => {
+      if (model.id === "door" || model.id === "window") return;
+
       const target = document.getElementById(`target-${model.id}`);
 
       if (!target) return;
 
       const onFound = () => {
-        setStatus(`Found ${model.name} detected`);
         if (model.id === "engine") {
           setIsEngineActive(true);
         }
+        setStatus(`Found ${model.name} detected`);
       };
 
       const onLost = () => {
-        setStatus(`Lost ${model.name} detected`);
         if (model.id === "engine") {
           setIsEngineActive(false);
         }
+        setStatus(`Lost ${model.name} detected`);
       };
 
       target.addEventListener("targetFound", onFound);
@@ -39,6 +50,28 @@ function App() {
         target.removeEventListener("targetLost", onLost);
       });
     });
+
+    const doorWindowTarget = document.getElementById("target-door-window");
+    if (doorWindowTarget) {
+      const onFound = () => {
+        setDoorViewMode("door");
+        setIsDoorTargetActive(true);
+        setStatus("Found Door / Window card detected");
+      };
+
+      const onLost = () => {
+        setIsDoorTargetActive(false);
+        setStatus("Door / Window card lost");
+      };
+
+      doorWindowTarget.addEventListener("targetFound", onFound);
+      doorWindowTarget.addEventListener("targetLost", onLost);
+
+      listeners.push(() => {
+        doorWindowTarget.removeEventListener("targetFound", onFound);
+        doorWindowTarget.removeEventListener("targetLost", onLost);
+      });
+    }
 
     return () => {
       listeners.forEach((removeListener) => removeListener());
@@ -74,9 +107,26 @@ function App() {
         </div>
       )}
 
+      {isDoorTargetActive && (
+        <div
+          className={`door-toggle-container${isEngineActive ? " with-engine" : ""}`}
+        >
+          <button
+            type="button"
+            className="btn-door-toggle"
+            onClick={() =>
+              setDoorViewMode((prev) => (prev === "door" ? "window" : "door"))
+            }
+          >
+           
+            {doorViewMode === "door" ? "Switch to Window" : "Switch to Door"}
+          </button>
+        </div>
+      )}
+
       <a-scene
         mindar-image="imageTargetSrc: /targets_combined.mind;
-          maxTrack: 3;
+          maxTrack: 7;
           autoStart: true;
           uiLoading: no;
           uiScanning: yes;
@@ -106,23 +156,50 @@ function App() {
           look-controls="enabled: false"
         />
 
-        {models.map((model) => (
-          <a-entity
-            key={model.id}
-            id={`target-${model.id}`}
-            mindar-image-target={`targetIndex: ${model.targetIndex}`}
-          >
+        {models
+          .filter((model) => model.id !== "door" && model.id !== "window")
+          .map((model) => (
+            <a-entity
+              key={model.id}
+              id={`target-${model.id}`}
+              mindar-image-target={`targetIndex: ${model.targetIndex}`}
+            >
+              <a-gltf-model
+                id={`model-${model.id}`}
+                src={`#asset-${model.id}`}
+                visible="true"
+                position={model.position}
+                rotation={model.rotation}
+                scale={model.scale}
+                gesture-rotation
+                play-clips={`exclude: ${model.excludeClip ?? 0}; timeScale: ${model.timeScale ?? 1}; loop: ${model.loop ?? true}; autoplay: ${model.autoplay ?? true};`}
+              />
+            </a-entity>
+          ))}
+
+        <a-entity
+          id="target-door-window"
+          mindar-image-target={`targetIndex: ${doorWindowTargetIndex}`}
+        >
+          {doorWindowModels.map((model) => (
             <a-gltf-model
+              key={model.id}
               id={`model-${model.id}`}
               src={`#asset-${model.id}`}
+              visible={
+                (model.id === "door" && doorViewMode === "door") ||
+                (model.id === "window" && doorViewMode === "window")
+                  ? "true"
+                  : "false"
+              }
               position={model.position}
               rotation={model.rotation}
               scale={model.scale}
               gesture-rotation
               play-clips={`exclude: ${model.excludeClip ?? 0}; timeScale: ${model.timeScale ?? 1}; loop: ${model.loop ?? true}; autoplay: ${model.autoplay ?? true};`}
             />
-          </a-entity>
-        ))}
+          ))}
+        </a-entity>
       </a-scene>
     </main>
   );

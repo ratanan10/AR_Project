@@ -186,7 +186,8 @@ function App() {
               key={model.id}
               id={`model-${model.id}`}
               src={`#asset-${model.id}`}
-              visible={
+              visible= 
+              {
                 (model.id === "door" && doorViewMode === "door") ||
                 (model.id === "window" && doorViewMode === "window")
                   ? "true"

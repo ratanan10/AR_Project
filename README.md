@@ -51,7 +51,7 @@ AR_project/
 └── README.md
 ```
 
- ⚙️ How It Works
+  How It Works
 
 1. **Image Target Preparation:** The reference image is processed into a MindAR `.mind` target file.
 2. **Target Detection:** MindAR accesses the device camera and detects the predefined image.
@@ -60,7 +60,7 @@ AR_project/
 5. **Engine Interaction:** Open Engine and Close Engine controls play the animation in reverse and forward directions.
 6. **Model Rotation:** Touch and drag interactions allow users to rotate the 3D engine.
 
- 💻 Getting Started
+  Getting Started
 
  Prerequisites
 
@@ -104,7 +104,7 @@ Open the local URL displayed in the terminal and allow camera access.
 
 **Note:** Camera access on deployed websites generally requires HTTPS. For local development, `localhost` is supported by modern browsers.
 
-## 📦 Production Build
+ Production Build
 
 To generate the production build:
 
@@ -120,6 +120,6 @@ The objective of this project is to demonstrate the potential of WebAR in visual
 
 By combining image recognition, 3D modelling, animation, and user interaction, the V6 Engine WebAR experience provides an engaging way to explore engine components in an augmented reality environment.
 
-## 👨‍💻 Developer
+ Developer
 
 Developed as an interactive WebAR project using modern web technologies.

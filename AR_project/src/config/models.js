@@ -36,7 +36,7 @@ const models = [
     timeScale: 1,
     scale: "0.025 0.025 0.025",
     position: "0 0 0.1",
-    rotation: "0 0 0",
+    rotation: "0 90 0",
     loop: false,
     autoplay: false,
     enableGestureRotation: true,
@@ -63,11 +63,12 @@ const models = [
     excludeClip: -1,
     timeScale: 1,
     scale: "0.01 0.01 0.01",
-    position: "0.1 0.1 0.1",
+    position: "0.1 0.50 0.1",
     rotation: "0 90 0",
     loop: true,
     autoplay: true,
     enableGestureRotation: true,
+    enablezoom: true,
   },
 
   {
@@ -82,7 +83,7 @@ const models = [
     rotation: "0 0 0",
     loop: true,
     autoplay: true,
-    enableGestureRotation: true,
+    enableGestureRotation: false,
   },
 
   {
@@ -96,7 +97,7 @@ const models = [
     rotation: "0 0 0",
     loop: true,
     autoplay: true,
-    enableGestureRotation: true,
+    enableGestureRotation: false,
   }
 ];
 
